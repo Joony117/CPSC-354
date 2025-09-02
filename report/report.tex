@@ -1,0 +1,126 @@
+\documentclass{article}
+
+\usepackage{tikz} 
+\usetikzlibrary{automata, positioning, arrows} 
+
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{fullpage}
+\usepackage{color}
+\usepackage{parskip}
+\usepackage{hyperref}
+  \hypersetup{
+    colorlinks = true,
+    urlcolor = blue,       % color of external links using \href
+    linkcolor= blue,       % color of internal links 
+    citecolor= blue,       % color of links to bibliography
+    filecolor= blue,        % color of file links
+    }
+    
+\usepackage{listings}
+\usepackage[utf8]{inputenc}                                                    
+\usepackage[T1]{fontenc}                                                       
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=haskell,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+\newtheoremstyle{theorem}
+  {\topsep}   % ABOVESPACE
+  {\topsep}   % BELOWSPACE
+  {\itshape\/}  % BODYFONT
+  {0pt}       % INDENT (empty value is the same as 0pt)
+  {\bfseries} % HEADFONT
+  {.}         % HEADPUNCT
+  {5pt plus 1pt minus 1pt} % HEADSPACE
+  {}          % CUSTOM-HEAD-SPEC
+\theoremstyle{theorem} 
+   \newtheorem{theorem}{Theorem}[section]
+   \newtheorem{corollary}[theorem]{Corollary}
+   \newtheorem{lemma}[theorem]{Lemma}
+   \newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+   \newtheorem{definition}[theorem]{Definition}
+   \newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}    
+  \newtheorem{remark}[theorem]{Remark}
+
+\title{CPSC-354 Report}
+\author{Junho Yi  \\ Chapman University}
+
+\date{\today} 
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\end{abstract}
+
+\setcounter{tocdepth}{3}
+\tableofcontents
+
+\section{Introduction}\label{intro}
+
+\section{Week by Week}\label{homework}
+
+\subsection{Week 1}
+
+\subsubsection{Notes and Exploration}
+
+Place holder for notes
+
+\subsubsection{Homework 1}
+This week's HW is regarding the MU puzzle, and its relevance and application to formal systems. Here we use the MU puzzle to practice and familiarize ourselves with staying within the confines of a formal system. We are given 4 rules/restrictions, which is referred to as the "Requirement of Formality". 
+Our formal system consists of these 4 rules:
+\begin{enumerate}
+    \item RULE I: If you possess a string whose last letter is I, you can add on a U at the end. 
+    \item RULE II: Suppose you have Mx. Then you may add Mxx to your collection. 
+    \item RULE III: If III occurs in one of the strings in your collection, you may make a new
+string with U in place of III.
+    \item RULE IV: If UU occurs inside one of your strings, you can drop it. 
+\end{enumerate}
+With these four rules in mind, we have one objective: stay within the rules and produce "MU" from "MI".
+As I worked through the rules, I logically deduced these points in this order:
+\begin{enumerate}
+    \item When doubling I's, after the first I, the number of I's always remain even
+    \item When applying RULE III, the remaining I's stay even, meaning after the U conversion, there is always a even number of remaining I's
+    \item The MIU pattern gets stuck in a infinitely repeating IU pattern after applying RULE II
+    \item you can never get rid of I's because of item number 2
+\end{enumerate}
+
+From the above observations we can see that the I's will either always appear in even pairs, or be accompanied by a 'U', which means that we either have to divide our even I's by 3(rule 3), which always results again in a even I, or have I be stuck with a U in a string with no way to get rid of the I alone. 
+From this we can conclude(especially from items 2 and 4) that with our formal system, we cannot reach MU from MI with our current system without modifications. 
+
+
+
+\section{Essay}
+
+\section{Evidence of Participation}
+
+\section{Conclusion}\label{conclusion}
+
+\begin{thebibliography}{99}
+\bibitem[BLA]{bla} Author, \href{https://en.wikipedia.org/wiki/LaTeX}{Title}, Publisher, Year.
+\end{thebibliography}
+
+\end{document}
