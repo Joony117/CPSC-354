@@ -89,6 +89,24 @@
 
 Place holder for notes
 
+
+In abstract rewriting, an object is in normal form if it cannot be rewritten any further, i.e. it is irreducible
+
+Confluence system: in a system the result eventually converges into the same answer.
+
+Termination: Means the system stops at some point. 
+
+Decidability: 
+
+church turing thesis:
+
+Abstract rewriting system(ARS): mathematically the same as a directed graph
+A is a set of "strings" (can be anything)
+R is the relation
+
+so in the MIU puzzle, A is M I U, the strings we use
+then R is the rules we are given. ie: {(Mx,Mxx)|x e A} U...
+
 \subsubsection{Homework 1}
 This week's HW is regarding the MU puzzle, and its relevance and application to formal systems. Here we use the MU puzzle to practice and familiarize ourselves with staying within the confines of a formal system. We are given 4 rules/restrictions, which is referred to as the "Requirement of Formality". 
 Our formal system consists of these 4 rules:
@@ -102,14 +120,27 @@ string with U in place of III.
 With these four rules in mind, we have one objective: stay within the rules and produce "MU" from "MI".
 As I worked through the rules, I logically deduced these points in this order:
 \begin{enumerate}
-    \item When doubling I's, after the first I, the number of I's always remain even
-    \item When applying RULE III, the remaining I's stay even, meaning after the U conversion, there is always a even number of remaining I's
-    \item The MIU pattern gets stuck in a infinitely repeating IU pattern after applying RULE II
-    \item you can never get rid of I's because of item number 2
+    \item When applying RULE II, if I exists somewhere on the string, the parity of I becomes even until RULE III is applied again.
+    \item When applying RULE III, the I's(which are even, if RULE III applies), swaps parity, i.e: it goes from even to odd.
+    \item The lowest continuous string of I's where RULE III can be applied is four I's.
+    \item Because RULE III is the only way to reduce the number of I's, and its only possible to apply RULE III if there is a minimum of four continuous I's(due to RULE II) and an even parity of I's, using RULE III to reduce the amount of I's will always result in a remainder(leftover I).
+    \item Therefore, you can never get rid of I's fully with RULE III, or any other RULE usable by us without modifications of the rules.
 \end{enumerate}
 
-From the above observations we can see that the I's will either always appear in even pairs, or be accompanied by a 'U', which means that we either have to divide our even I's by 3(rule 3), which always results again in a even I, or have I be stuck with a U in a string with no way to get rid of the I alone. 
-From this we can conclude(especially from items 2 and 4) that with our formal system, we cannot reach MU from MI with our current system without modifications. 
+From the above observations, we can see that there is no way to completely reduce the number of I's into zero with the given rules. This is my personal analysis of the MU puzzle, below is the "correct" analysis of the MU puzzle
+
+\paragraph{Proof (invariant mod 3).}
+Let $n$ be the number of I’s in the current string. Then:
+\[
+\text{Rule I: } n\mapsto n,\quad
+\text{Rule II: } n\mapsto 2n,\quad
+\text{Rule III: } n\mapsto n-3,\quad
+\text{Rule IV: } n\mapsto n.
+\]
+Hence $n\bmod 3$ is preserved by Rules I, III, IV, and toggles between $1$ and $2$ under Rule II.
+Initially, $MI$ has $n=1\equiv 1\pmod 3$. No sequence of the above operations can yield $n\equiv 0\pmod 3$.
+But $MU$ has $0$ I’s, i.e.\ $n=0\equiv 0\pmod 3$. Therefore $MU$ is not derivable from $MI$.
+\qed
 
 
 
