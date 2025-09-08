@@ -3,6 +3,8 @@
 \usepackage{tikz} 
 \usetikzlibrary{automata, positioning, arrows} 
 
+\usepackage{tikz-cd}
+\usepackage{quiver}
 \usepackage{amsthm}
 \usepackage{amsfonts}
 \usepackage{amsmath}
@@ -108,26 +110,30 @@ so in the MIU puzzle, A is M I U, the strings we use
 then R is the rules we are given. ie: {(Mx,Mxx)|x e A} U...
 
 \subsubsection{Homework 1}
-This week's HW is regarding the MU puzzle, and its relevance and application to formal systems. Here we use the MU puzzle to practice and familiarize ourselves with staying within the confines of a formal system. We are given 4 rules/restrictions, which is referred to as the "Requirement of Formality". 
+
+This week's HW is regarding the MU puzzle, and its relevance and application to formal systems. Here we use the MU puzzle to practice and familiarize ourselves with staying within the confines of a formal system. We are given 4 rules/restrictions, which is referred to as the ``Requirement of Formality.'' 
+
 Our formal system consists of these 4 rules:
 \begin{enumerate}
-    \item RULE I: If you possess a string whose last letter is I, you can add on a U at the end. 
-    \item RULE II: Suppose you have Mx. Then you may add Mxx to your collection. 
-    \item RULE III: If III occurs in one of the strings in your collection, you may make a new
-string with U in place of III.
-    \item RULE IV: If UU occurs inside one of your strings, you can drop it. 
-\end{enumerate}
-With these four rules in mind, we have one objective: stay within the rules and produce "MU" from "MI".
-As I worked through the rules, I logically deduced these points in this order:
-\begin{enumerate}
-    \item When applying RULE II, if I exists somewhere on the string, the parity of I becomes even until RULE III is applied again.
-    \item When applying RULE III, the I's(which are even, if RULE III applies), swaps parity, i.e: it goes from even to odd.
-    \item The lowest continuous string of I's where RULE III can be applied is four I's.
-    \item Because RULE III is the only way to reduce the number of I's, and its only possible to apply RULE III if there is a minimum of four continuous I's(due to RULE II) and an even parity of I's, using RULE III to reduce the amount of I's will always result in a remainder(leftover I).
-    \item Therefore, you can never get rid of I's fully with RULE III, or any other RULE usable by us without modifications of the rules.
+    \item \textbf{RULE I}: If you possess a string whose last letter is $I$, you can add on a $U$ at the end. 
+    \item \textbf{RULE II}: Suppose you have $Mx$. Then you may add $Mxx$ to your collection. 
+    \item \textbf{RULE III}: If $III$ occurs in one of the strings in your collection, you may make a new string with $U$ in place of $III$.
+    \item \textbf{RULE IV}: If $UU$ occurs inside one of your strings, you can drop it. 
 \end{enumerate}
 
-From the above observations, we can see that there is no way to completely reduce the number of I's into zero with the given rules. This is my personal analysis of the MU puzzle, below is the "correct" analysis of the MU puzzle
+With these four rules in mind, we have one objective: stay within the rules and produce $MU$ from $MI$.
+
+As I worked through the rules, I logically deduced these points in this order:
+\begin{enumerate}
+    \item When applying RULE II, if $I$ exists somewhere in the string, the parity of $I$ becomes even until RULE III is applied again.
+    \item When applying RULE III, the $I$'s (which are even, if RULE III applies) swap parity, i.e.\ $\text{even} \;\mapsto\; \text{odd}$.
+    \item The lowest continuous string of $I$'s where RULE III can be applied is $IIII$ (four $I$'s).
+    \item Because RULE III is the only way to reduce the number of $I$'s, and it is only possible to apply RULE III if there is a minimum of four continuous $I$'s (due to RULE II) and an even parity of $I$'s, using RULE III to reduce the amount of $I$'s will always result in a remainder (a leftover $I$).
+    \item Therefore, you can never get rid of $I$'s fully with RULE III, or any other RULE usable by us without modifications of the rules.
+\end{enumerate}
+
+From the above observations, we can see that there is no way to completely reduce the number of $I$'s into zero with the given rules. This is my personal analysis of the MU puzzle; below is the ``correct'' analysis of the MU puzzle.
+
 
 \paragraph{Proof (invariant mod 3).}
 Let $n$ be the number of I’s in the current string. Then:
@@ -142,6 +148,205 @@ Initially, $MI$ has $n=1\equiv 1\pmod 3$. No sequence of the above operations ca
 But $MU$ has $0$ I’s, i.e.\ $n=0\equiv 0\pmod 3$. Therefore $MU$ is not derivable from $MI$.
 \qed
 
+\subsection{Week 2, Rewriting theory}
+
+\subsubsection{Notes and Exploration}
+placeholder for notes
+
+\subsubsection{HW 2}
+\begin{enumerate}
+  \item \(\begin{aligned}
+           A &= \{\}
+         \end{aligned}\)
+         
+
+  \item \(\begin{aligned}
+           A &= \{a\}, & R &= \{\}
+         \end{aligned}\)
+
+  \item \(\begin{aligned}
+           A &= \{a\}, & R &= \{(a,a)\}
+         \end{aligned}\)
+
+  \item \(\begin{aligned}
+           A &= \{a,b,c\}, & R &= \{(a,b),(a,c)\}
+         \end{aligned}\)
+
+  \item \(\begin{aligned}
+           A &= \{a,b\}, & R &= \{(a,a),(a,b)\}
+         \end{aligned}\)
+
+  \item \(\begin{aligned}
+           A &= \{a,b,c\}, & R &= \{(a,b),(b,b),(a,c)\}
+         \end{aligned}\)
+
+  \item \(\begin{aligned}
+           A &= \{a,b,c\}, & R &= \{(a,b),(b,b),(a,c),(c,c)\}
+         \end{aligned}\)
+\end{enumerate}
+
+
+\paragraph{Homework: Draw a picture for each of the ARSs above. Are the ARSs terminating? Are they confluent? Do they have unique normal forms?}
+
+\begin{enumerate}
+    \item % https://q.uiver.app/#q=WzAsMSxbMCwwLCJcXGJ1bGxldCJdXQ==
+\[\begin{tikzcd}
+	\textcircled{ }
+\end{tikzcd}\]
+
+\[
+\text{Terminating } \checkmark
+\;\big|\;
+\text{Confluent } \checkmark
+\;\big|\;
+\text{Unique normal forms } \checkmark
+\]
+
+    \item % https://q.uiver.app/#q=WzAsMSxbMCwwLCJcXHRleHRjaXJjbGVke2F9Il1d
+\[\begin{tikzcd}
+	{\textcircled{a}}
+\end{tikzcd}\]
+
+\[
+\text{Terminating } \checkmark
+\;\big|\;
+\text{Confluent } \checkmark
+\;\big|\;
+\text{Unique normal forms } \checkmark
+\]
+
+    \item % https://q.uiver.app/#q=WzAsMSxbMCwwLCJcXHRleHRjaXJjbGVke2F9Il0sWzAsMF1d
+\[\begin{tikzcd}
+	{\textcircled{a}}
+	\arrow[from=1-1, to=1-1, loop, in=55, out=125, distance=10mm]
+\end{tikzcd}\]
+
+\[
+\text{Terminating } \times
+\;\big|\;
+\text{Confluent } \checkmark
+\;\big|\;
+\text{Unique normal forms } \times
+\]
+
+    \item % https://q.uiver.app/#q=WzAsMyxbMSwwLCJcXHRleHRjaXJjbGVke2F9Il0sWzAsMSwiXFx0ZXh0Y2lyY2xlZHtifSJdLFsyLDEsIlxcdGV4dGNpcmNsZWR7Y30iXSxbMCwxXSxbMCwyXV0=
+\[\begin{tikzcd}
+	& {\textcircled{a}} \\
+	{\textcircled{b}} && {\textcircled{c}}
+	\arrow[from=1-2, to=2-1]
+	\arrow[from=1-2, to=2-3]
+\end{tikzcd}\]
+
+\[
+\text{Terminating } \checkmark
+\;\big|\;
+\text{Confluent } \times
+\;\big|\;
+\text{Unique normal forms } \times
+\]
+
+
+    \item % https://q.uiver.app/#q=WzAsMixbMSwwLCJcXHRleHRjaXJjbGVke2F9Il0sWzAsMSwiXFx0ZXh0Y2lyY2xlZHtifSJdLFswLDFdLFswLDBdXQ==
+\[\begin{tikzcd}
+	& {\textcircled{a}} \\
+	{\textcircled{b}}
+	\arrow[from=1-2, to=1-2, loop, in=55, out=125, distance=10mm]
+	\arrow[from=1-2, to=2-1]
+\end{tikzcd}\]
+
+\[
+\text{Terminating } \times
+\;\big|\;
+\text{Confluent } \checkmark
+\;\big|\;
+\text{Unique normal forms } \checkmark
+\]
+
+    \item % https://q.uiver.app/#q=WzAsMyxbMSwwLCJcXHRleHRjaXJjbGVke2F9Il0sWzAsMCwiXFx0ZXh0Y2lyY2xlZHtifSJdLFsyLDAsIlxcdGV4dGNpcmNsZWR7Y30iXSxbMCwxXSxbMSwxXSxbMCwyXV0=
+\[\begin{tikzcd}
+	{\textcircled{b}} & {\textcircled{a}} & {\textcircled{c}}
+	\arrow[from=1-1, to=1-1, loop, in=55, out=125, distance=10mm]
+	\arrow[from=1-2, to=1-1]
+	\arrow[from=1-2, to=1-3]
+\end{tikzcd}\]
+
+\[
+\text{Terminating } \times
+\;\big|\;
+\text{Confluent } \times
+\;\big|\;
+\text{Unique normal forms } \times
+\]
+
+    \item % https://q.uiver.app/#q=WzAsMyxbMSwwLCJcXHRleHRjaXJjbGVke2F9Il0sWzAsMCwiXFx0ZXh0Y2lyY2xlZHtifSJdLFsyLDAsIlxcdGV4dGNpcmNsZWR7Y30iXSxbMCwxXSxbMSwxLCIiLDAseyJyYWRpdXMiOi0zLCJhbmdsZSI6LTE4MH1dLFswLDJdLFsyLDJdXQ==
+\[\begin{tikzcd}
+	{\textcircled{b}} & {\textcircled{a}} & {\textcircled{c}}
+	\arrow[from=1-1, to=1-1, loop, in=125, out=55, distance=10mm]
+	\arrow[from=1-2, to=1-1]
+	\arrow[from=1-2, to=1-3]
+	\arrow[from=1-3, to=1-3, loop, in=55, out=125, distance=10mm]
+\end{tikzcd}\]
+
+\[
+\text{Terminating } \times
+\;\big|\;
+\text{Confluent } \times
+\;\big|\;
+\text{Unique normal forms } \times
+\]
+
+\end{enumerate}
+
+
+
+\paragraph{Homework: Try to find an example of an ARS for each of the possible 8 combinations. Draw pictures of these examples.}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{confluent} & \textbf{terminating} & \textbf{has unique normal forms} & \textbf{example} \\ \hline
+True  & True  & True  &
+\begin{tikzcd}
+	\textcircled{ }
+\end{tikzcd},  
+\begin{tikzcd}
+	{\textcircled{a}}
+\end{tikzcd} \\ \hline
+True  & True  & False &   not possible \\ \hline
+True  & False & True  &     
+\begin{tikzcd}
+	& {\textcircled{a}} \\
+	{\textcircled{b}}
+	\arrow[from=1-2, to=1-2, loop, in=55, out=125, distance=10mm]
+	\arrow[from=1-2, to=2-1]
+\end{tikzcd}\\ \hline
+True  & False & False &    
+\begin{tikzcd}
+	{\textcircled{a}}
+	\arrow[from=1-1, to=1-1, loop, in=55, out=125, distance=10mm]
+\end{tikzcd}
+ \\ \hline
+False & True  & True  & not possible \\ \hline
+False & True  & False &      
+\begin{tikzcd}
+	& {\textcircled{a}} \\
+	{\textcircled{b}} && {\textcircled{c}}
+	\arrow[from=1-2, to=2-1]
+	\arrow[from=1-2, to=2-3]
+\end{tikzcd}
+\\ \hline
+False & False & True  & not possible \\ \hline
+False & False & False &    
+\begin{tikzcd}
+	{\textcircled{b}} & {\textcircled{a}} & {\textcircled{c}}
+	\arrow[from=1-1, to=1-1, loop, in=125, out=55, distance=10mm]
+	\arrow[from=1-2, to=1-1]
+	\arrow[from=1-2, to=1-3]
+	\arrow[from=1-3, to=1-3, loop, in=55, out=125, distance=10mm]
+\end{tikzcd} \\ \hline
+\end{tabular}
+\end{center}
 
 
 \section{Essay}
