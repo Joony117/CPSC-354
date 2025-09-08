@@ -1,2 +1,4 @@
 # CPSC-354
-repo for HW and notes for CPSC-354- prof weinberger
+repo for the report in tex and pdf file for CPSC-354- prof weinberger
+Name: Jun Yi
+Email: Junyi@chapman.edu
