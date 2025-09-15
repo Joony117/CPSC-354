@@ -348,6 +348,96 @@ False & False & False &
 \end{tabular}
 \end{center}
 
+\subsection{Week 3, String rewriting}
+
+\subsubsection{HW 3}
+
+For this week's homework, we are tasked with answering the questions on Exercises 5 and 5b.
+
+Exercise 5:
+
+
+\begin{itemize}
+    \item Reduce some example strings such as \texttt{abba} and \texttt{bababa}.
+\begin{center}
+\begin{tabular}{l l}
+\textbf{Reduce \texttt{abba}} & \textbf{Reduce \texttt{bababa}}\\ \hline
+\texttt{abba}                 & \texttt{bababa} \\
+\texttt{aba}                  & \texttt{ababa}  \\
+\texttt{aa}                   & \texttt{aaba}   \\
+\texttt{$\varepsilon$}        & \texttt{aaa}    \\
+                              & \texttt{a}      \\
+\end{tabular}
+\end{center}
+    
+  \item \textbf{Why is the ARS not terminating?}
+
+  The ARS does not terminate because the system is not strongly normalizing. Rules 1 and 2 are bi-directional swap rules, thus there exists an infinite reduction.
+
+  \item \textbf{Find two strings that are not equivalent. How many non-equivalent strings can you find?}
+
+  \texttt{a} and $\varepsilon$. If the question is asking for “how many strings not equivalent to $\varepsilon$,” then we can find an infinite number of non-equivalent strings (i.e., any string with odd number of \texttt{a}'s vs even number of \texttt{a}'s).
+
+  \item \textbf{How many equivalence classes does $\stackrel{\ast}{\longleftrightarrow}$ have? Can you describe them in a nice way? What are the normal forms?}
+
+  The normal forms are \texttt{a} and $\varepsilon$, the two equivalence classes are strings with even number of \texttt{a}'s and odd number of \texttt{a}'s.
+
+  \item \textbf{Can you modify the ARS so that it becomes terminating without changing its equivalence classes?}
+
+  We have to get rid of either rule 1 or 2, to make the ARS strongly normalizing.
+
+  \item \textbf{Write down a question or two about strings that can be answered using the ARS. Think about whether this amounts to giving a semantics to the ARS.}
+
+  \textit{[Hint: The best answers are likely to involve a complete invariant.]}
+
+  \textbf{Remark:} A characterization of the equivalence classes that mentions the reduction relation is not interesting.
+
+  Question: “Does this string have an even or odd number of \texttt{a}'s? Which equivalence class does even/odd \texttt{a}'s belong to?”
+\end{itemize}
+
+
+Excercise 5b:
+
+\begin{itemize}
+  \item Reduce some example strings such as \texttt{abba} and \texttt{bababa}.
+
+  \begin{center}
+  \begin{tabular}{l l}
+  \textbf{Reduce \texttt{abba}} & \textbf{Reduce \texttt{bababa}}\\ \hline
+  \texttt{abba}                 & \texttt{bababa} \\
+  \texttt{aba}                  & \texttt{ababa}  \\
+  \texttt{aa}                   & \texttt{aaba}   \\
+  \texttt{a}                    & \texttt{aaa}    \\
+                                & \texttt{aa}     \\
+                                & \texttt{a}
+  \end{tabular}
+  \end{center}
+
+  \item \textbf{Why is the ARS not terminating?}
+
+  The ARS does not terminate because the system is not strongly normalizing. Rules 1 and 2 are bi-directional swap rules, thus there exists an infinite reduction.
+
+  \item \textbf{Find two strings that are not equivalent. How many non-equivalent strings can you find?}
+
+  \texttt{a} and $\varepsilon$. If the question is asking for “how many strings not equivalent to $\varepsilon$,” then there are infinitely many (e.g., any string containing at least one \texttt{a}).
+
+  \item \textbf{How many equivalence classes does $\stackrel{\ast}{\longleftrightarrow}$ have? Can you describe them in a nice way? What are the normal forms?}
+
+  The normal forms are \texttt{a} and $\varepsilon$. The two equivalence classes are: strings with \emph{no} \texttt{a}'s (equivalent to $\varepsilon$), and strings with \emph{at least one} \texttt{a} (equivalent to \texttt{a}).
+
+  \item \textbf{Can you modify the ARS so that it becomes terminating without changing its equivalence classes?}
+
+  We have to get rid of either rule 1 or 2, to make the ARS strongly normalizing.
+
+  \item \textbf{Write down a question or two about strings that can be answered using the ARS. Think about whether this amounts to giving a semantics to the ARS.}
+
+  \textit{[Hint: The best answers are likely to involve a complete invariant.]}
+
+  \textbf{Remark:} A characterization of the equivalence classes that mentions the reduction relation is not interesting.
+
+  Question: “Does this string have an \texttt{a} or not? Which equivalence class do ‘no \texttt{a}’ and ‘some \texttt{a}’ belong to?”
+\end{itemize}
+
 
 \section{Essay}
 
