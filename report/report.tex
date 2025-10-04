@@ -3,6 +3,7 @@
 \usepackage{tikz} 
 \usetikzlibrary{automata, positioning, arrows} 
 
+\usepackage{mathtools}
 \usepackage{tikz-cd}
 \usepackage{quiver}
 \usepackage{amsthm}
@@ -439,6 +440,302 @@ Excercise 5b:
 \end{itemize}
 
 
+
+
+\subsection{Week 4, Termination}
+\subsubsection*{HW 4 (Termination) \cite{kurz-hw4}}
+Below I use the simple ``measure gets smaller'' idea from the notes on termination \cite{kurz-termination}: pick something that you can track after each step. If that thing always gets smaller and can never go down forever, the process must stop.
+
+\paragraph{4.1 (Euclid's algorithm for greatest common divisor).}
+\textbf{Code we are talking about}
+\begin{verbatim}
+while b != 0:
+  temp = b
+  b = a % b
+  a = temp
+return a
+\end{verbatim}
+
+\textbf{Why it always stops}
+\begin{itemize}
+  \item Think of \texttt{b} as our ``measure.'' We just watch the value of \texttt{b}.
+  \item Each time through the loop we set \texttt{b} to the remainder when \texttt{a} is divided by \texttt{b}.
+  \item A remainder is always a smaller nonnegative number than the thing you divide by. So new \texttt{b} is always smaller than the old \texttt{b}, and it never becomes negative.
+  \item Because \texttt{b} keeps shrinking and cannot shrink forever, it will eventually reach zero.
+  \item When \texttt{b} becomes zero, the loop condition \texttt{b != 0} is false and the program stops.
+\end{itemize}
+Keep track of \texttt{b}; it strictly goes down each step; it must hit zero and stop.
+
+\paragraph{4.2 (Merge sort).}
+\textbf{Code shape we are talking about}
+\begin{verbatim}
+function merge_sort(arr, left, right):
+  if left >= right: return
+  mid = (left + right) / 2   # integer division
+  merge_sort(arr, left, mid)
+  merge_sort(arr, mid+1, right)
+  merge(arr, left, mid, right)
+\end{verbatim}
+
+\textbf{Why it always stops}
+\begin{itemize}
+  \item Our measure is the length of the current subarray, from \texttt{left} to \texttt{right}.
+  \item If the length is zero or one, we return immediately. No more calls.
+  \item Otherwise, we split the range into two halves. Each half is strictly smaller than the original range.
+  \item The two recursive calls work on these smaller halves. Since the lengths keep getting smaller, we cannot keep splitting forever.
+  \item Eventually every piece is length zero or one, so the base case triggers and all calls finish.
+  \item The \texttt{merge} step does not call \texttt{merge\_sort} again, so it does not affect whether the algorithm stops.
+\end{itemize}
+ Each recursive step makes ``current length'' smaller. You cannot reduce the length forever, so the process reaches the base case and stops.
+
+\subsection{Week 5, Lambda Calculus, Syntax and Semantics}
+\subsubsection*{HW 5 (Lambda Calculus, Syntax and Semantics) \cite{kurz-hw5}}
+
+\paragraph{Task.}
+Reduce the following by \emph{normal order} (leftmost--outermost), keeping the outer abstractions intact and using $\alpha$-renaming only to avoid clashes:
+\[
+(\lambda f.\,\lambda x.\,f(f\,x))\;
+(\lambda f.\,\lambda x.\,f(f(f\,x))).
+\]
+
+\paragraph{My steps.}
+
+\begin{enumerate}
+  \item 
+  \[
+  (\lambda f.\,\lambda x.\,f(f\,x))\;(\lambda f.\,\lambda x.\,f(f(f\,x)))
+  \quad\text{\small(renaming note: set }G \equiv (\lambda f.\,\lambda x.\,f(f(f\,x)))\text{; $\alpha$-rename inner $x\to y$ if needed)}
+  \]
+
+  \item 
+  \[
+  (\lambda x.\,(\lambda f.\,\lambda y.\,f(f(f\,y)))\;((\lambda f.\,\lambda y.\,f(f(f\,y)))\;x))
+  \quad\text{\small($\lambda x.$ is the function; inside is the body with two applications $A$ and $B$)}
+  \]
+  \[
+  \text{\small here } 
+  A \;\coloneqq\; (\lambda f.\,\lambda y.\,f(f(f\,y))),
+  \qquad
+  B \;\coloneqq\; ((\lambda f.\,\lambda y.\,f(f(f\,y)))\;x),
+  \quad
+  \text{\small apply $\beta$ only to applications.}
+  \]
+
+  \item \textit{--- rename inner $y$ into $u$:}
+  \[
+  (\lambda x.\,(\lambda f.\,\lambda u.\,f(f(f\,u)))\;((\lambda f.\,\lambda y.\,f(f(f\,y)))\;x))
+  \]
+
+  \item 
+  \[
+  (\lambda x.\,(\lambda u.\,((\lambda f.\,\lambda y.\,f(f(f\,y)))\;x)\;(((\lambda f.\,\lambda y.\,f(f(f\,y)))\;x)\;(((\lambda f.\,\lambda y.\,f(f(f\,y)))\;x)\;u))))
+  \]
+
+  \item 
+  \[
+  (\lambda x.\,(\lambda u.\,((\;(\lambda y.\,(x\,(x\,(x\,y)))\;)\;((\lambda y.\,(x\,(x\,(x\,y))))\;((\lambda y.\,(x\,(x\,(x\,y))))\;u)))))
+  \]
+
+  
+  \item \textit{get rid of unneeded parentheses:}
+  \[
+  \lambda x.\,\lambda u.\;x\big(x\big(x\;\big((\lambda y.\,x(x(x\,y)))\;((\lambda y.\,x(x(x\,y)))\;u)\big)\big)\big)
+  \]
+
+  \item 
+  \[
+  \lambda x.\,\lambda u.\;x\big(x\big(x\big(x(x(x\;((\lambda y.\,x(x(x\,y)))\;u)))\big)\big)\big)
+  \]
+
+  \item 
+  \[
+  \lambda x.\,\lambda u.\;x\big(x\big(x\big(x\big(x\big(x\big(x\big(x\big(x\,u\big)\big)\big)\big)\big)\big)\big)\big)
+  \]
+
+  \item 
+  \[
+  \lambda x.\,\lambda u.\;x\big(x\big(x\big(x\big(x\big(x\big(x\big(x\big(x\,u\big)\big)\big)\big)\big)\big)\big)\big)
+  \quad
+  \]
+\end{enumerate}
+
+\paragraph{Result.}
+The final line is in normal form (no $\beta$-redexes remain): every application is headed by the variable \(x\), not by a $\lambda$.
+
+\subsection{Week 6, Lambda Calculus, Syntax and Semantics}
+\subsubsection*{HW 6 (Fixed Point Combinator / \texttt{fix})}
+
+\paragraph{start:}
+\[
+\text{let rec } \mathsf{fact} = \lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * \mathsf{fact}(n-1)
+\quad \text{ in } \quad \mathsf{fact}\;3
+\]
+
+\paragraph{rules:}
+\[
+\begin{aligned}
+\texttt{fix}\;F &\to (F\;(\texttt{fix}\;F)) \\
+\text{let } x = e_1 \text{ in } e_2 &\to (\lambda x.\,e_2)\;e_1 \\
+\text{let rec } f = e_1 \text{ in } e_2 &\to \text{let } f = (\texttt{fix}\;(\lambda f.\, e_1)) \text{ in } e_2
+\end{aligned}
+\]
+
+\paragraph{1:}
+\[
+\text{let rec } \mathsf{fact} = \lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * \mathsf{fact}(n-1)
+\quad \text{ in } \quad \mathsf{fact}\;3
+\]
+\[
+e_1 = \lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * \mathsf{fact}(n-1)
+\quad\big|\big|\big|\quad
+e_2 = \mathsf{fact}\;3
+\]
+\[
+\text{let } \mathsf{fact} = \Big(\texttt{fix}\;(\lambda f.\,\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * \mathsf{fact}(n-1))\Big) \text{ in } \mathsf{fact}\;3
+\quad \textit{\small\;\; \(\leftarrow\) should have alpha renamed up here aka
+\(\big(\text{let } \mathsf{fact} = (\texttt{fix}\,(\lambda f.\,\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * f(n-1))) \text{ in } \mathsf{fact}\;3\big)\)}
+\]
+\[
+e_1 = \texttt{fix}\;(\lambda f.\,\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * \mathsf{fact}(n-1))
+\quad\big|\big|\big|\big|\quad
+e_2 = \mathsf{fact}\;3
+\]
+
+\paragraph{2: \(\text{let } x = e_1 \text{ in } e_2 \to (\lambda x.\,e_2)\,e_1\)}
+\[
+x = \mathsf{fact}
+\quad\big|\quad
+e_1 = \texttt{fix}\;(\lambda f.\,\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * \mathsf{fact}(n-1))
+\quad\big|\quad
+e_2 = \mathsf{fact}\;3
+\]
+\[
+(\lambda \mathsf{fact}.\; \mathsf{fact}\;3)\;\Big(\texttt{fix}\;(\lambda f.\,\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * \mathsf{fact}(n-1))\Big)
+\quad \textit{\small\(\leftarrow\) end of step 2}
+\]
+\[
+\textit{\small with alpha rename: } \; (\lambda \mathsf{fact}.\; \mathsf{fact}\;3)\;\big(\texttt{fix}\;(\lambda f.\, \lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * f(n-1))\big)
+\]
+
+\paragraph{3:}
+\[
+\big(\texttt{fix}\;(\lambda f.\,\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * \mathsf{fact}(n-1))\big)\;3
+\quad
+\textit{\small with alpha rename: }
+\big(\texttt{fix}\;(\lambda f.\, \lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * f(n-1))\big)\;3
+\quad
+\textit{\small and so on, will not fix completed code, this is here just for note}
+\]
+
+\paragraph{4\textless def of fix\textgreater:}
+\[
+F = (\lambda \mathsf{fact}.\,\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * \mathsf{fact}(n-1))
+\]
+\[
+\Big((\lambda \mathsf{fact}.\,\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * \mathsf{fact}(n-1))
+\;(\texttt{fix}\;(\lambda \mathsf{fact}.\,\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * \mathsf{fact}(n-1)))\Big)\;3
+\]
+
+\paragraph{5\textless beta rule: substitute \(\texttt{fix}\;F\)\textgreater:}
+\[
+(\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * (\texttt{fix}\;(\lambda \mathsf{fact}.\,\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * \mathsf{fact}(n-1)))\,(n-1))\;3
+\quad \textit{\small \(\leftarrow\) should have alpha renamed the fix}
+\]
+
+\paragraph{6\textless beta ruls: substitute \(3\)\textgreater:}
+\[
+\text{if } 3=0 \text{ then } 1 \text{ else } 3 * (\texttt{fix}\;(\lambda \mathsf{fact}.\,\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * \mathsf{fact}(n-1)))\,(3-1)
+\quad \textit{\small \(\leftarrow\) from here on out dont sub n inside fix functions}
+\]
+
+\paragraph{7\textless def of if\textgreater:}
+\[
+\big(\text{if } 3=0 \text{ then } 1 \text{ else } 3 * (\texttt{fix}\;(\lambda \mathsf{fact}.\,\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * \mathsf{fact}(n-1)))\;2\big)
+\]
+\[
+(3 * (\texttt{fix}\;(\lambda \mathsf{fact}.\,\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * \mathsf{fact}(n-1)))\;2)
+\]
+
+\paragraph{8\textless def of fix\textgreater:}
+\[
+F = (\lambda \mathsf{fact}.\,\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * \mathsf{fact}(n-1))
+\]
+\[
+(3 * (\lambda \mathsf{fact}.\,\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * \mathsf{fact}(n-1))\;(\texttt{fix}\;(\lambda \mathsf{fact}.\,\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * \mathsf{fact}(n-1)))\;2)
+\]
+
+\paragraph{9\textless beta rule: substitute \(\texttt{fix}\;F\)\textgreater:}
+\[
+(3 * (\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * (\texttt{fix}\;(\lambda \mathsf{fact}.\,\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * \mathsf{fact}(n-1)))\,(n-1))\;2)
+\]
+
+\paragraph{10\textless beta ruls: substitute \(2\)\textgreater:}
+\[
+(3 * (\text{if } 2=0 \text{ then } 1 \text{ else } 2 * (\texttt{fix}\;(\lambda \mathsf{fact}.\,\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * \mathsf{fact}(n-1)))\,(2-1)))
+\]
+
+\paragraph{11\textless def of if\textgreater:}
+\[
+(3 * (2 * (\texttt{fix}\;(\lambda \mathsf{fact}.\,\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * \mathsf{fact}(n-1)))\;1))
+\]
+
+\paragraph{12\textless def of fix\textgreater:}
+\[
+F = (\lambda \mathsf{fact}.\,\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * \mathsf{fact}(n-1))
+\]
+\[
+(3 * (2 * (\texttt{fix}\;(\lambda \mathsf{fact}.\,\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * \mathsf{fact}(n-1)))\;1))
+\]
+\[
+(3 * (2 * (\lambda \mathsf{fact}.\,\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * \mathsf{fact}(n-1))\;(\texttt{fix}\;(\lambda \mathsf{fact}.\,\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * \mathsf{fact}(n-1)))\;1))
+\]
+
+\paragraph{13\textless beta rule: substitute \(\texttt{fix}\;F\)\textgreater:}
+\[
+(3 * (2 * (\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * (\texttt{fix}\;(\lambda \mathsf{fact}.\,\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * \mathsf{fact}(n-1)))\,(n-1))\;1))
+\]
+
+\paragraph{14\textless beta ruls: substitute \(1\)\textgreater:}
+\[
+(3 * (2 * (\text{if } 1=0 \text{ then } 1 \text{ else } 1 * (\texttt{fix}\;(\lambda \mathsf{fact}.\,\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * \mathsf{fact}(n-1)))\;0)))
+\]
+
+\paragraph{14\textless def of if\textgreater:}
+\[
+(3 * (2 * (1 * (\texttt{fix}\;(\lambda \mathsf{fact}.\,\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * \mathsf{fact}(n-1)))\;0)))
+\]
+
+\paragraph{15\textless def of fix\textgreater:}
+\[
+F = (\lambda \mathsf{fact}.\,\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * \mathsf{fact}(n-1))
+\]
+\[
+(3 * (2 * (1 * ((\lambda \mathsf{fact}.\,\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * \mathsf{fact}(n-1))
+\;(\texttt{fix}\;(\lambda \mathsf{fact}.\,\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * \mathsf{fact}(n-1))))\;0)))
+\]
+
+\paragraph{16\textless beta rule: substitute \(\texttt{fix}\;F\)\textgreater:}
+\[
+(3 * (2 * (1 * ((\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * (\texttt{fix}\;(\lambda \mathsf{fact}.\,\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * \mathsf{fact}(n-1)))\,(n-1)))\;0)))
+\]
+
+\paragraph{17\textless beta ruls: substitute \(0\)\textgreater:}
+\[
+(3 * (2 * (1 * (\text{if } 0=0 \text{ then } 1 \text{ else } 0 * (\texttt{fix}\;(\lambda \mathsf{fact}.\,\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ else } n * \mathsf{fact}(n-1)))\,(0-1)))))
+\]
+
+\paragraph{18\textless def of if\textgreater:}
+\[
+(3 * (2 * (1 * 1)))
+\]
+
+\paragraph{19}
+\[
+(3 * 2 * 1 * 1)
+\]
+
+
+ 
 \section{Essay}
 
 \section{Evidence of Participation}
@@ -447,6 +744,13 @@ Excercise 5b:
 
 \begin{thebibliography}{99}
 \bibitem[BLA]{bla} Author, \href{https://en.wikipedia.org/wiki/LaTeX}{Title}, Publisher, Year.
+
+\bibitem[kurz-termination]{kurz-termination} Alexander Kurz, \emph{Termination}, HackMD, \url{https://hackmd.io/42apdFwaSp6ooCQ1woFkEg}.
+
+\bibitem[kurz-hw4]{kurz-hw4} Alexander Kurz, \emph{HW 4, PL 2025, Termination}, HackMD, \url{https://hackmd.io/@alexhkurz/HkdH9cPjxx}.
+
+\bibitem[kurz-hw5]{kurz-hw5} Alexander Kurz, \emph{Lambda Calculus, Syntax and Semantics}, HackMD, 2025, \url{https://hackmd.io/@alexhkurz/rJR2H3YCR#Workout}.
+
 \end{thebibliography}
 
 \end{document}
