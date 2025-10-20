@@ -734,6 +734,260 @@ F = (\lambda \mathsf{fact}.\,\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ 
 (3 * 2 * 1 * 1)
 \]
 
+\subsection{Week 7, context-free grammar}
+\subsubsection*{HW 7 (derivation trees)}
+
+\paragraph{Tree \#1}
+% https://q.uiver.app/#q=WzAsMTIsWzQsMCwiZXhwIl0sWzMsMSwiZXhwIl0sWzUsMSwiZXhwMSJdLFsyLDIsImV4cDEiXSxbNiwyLCJleHAyIl0sWzEsMywiZXhwMiJdLFswLDQsImludCJdLFswLDUsIjIiXSxbNywzLCJpbnQiXSxbNyw1LCIxIl0sWzQsMSwiKyJdLFs0LDUsIisiXSxbNiw3XSxbMCwxXSxbMSwzXSxbMyw1XSxbNSw2XSxbMCwyXSxbMiw0XSxbOCw5XSxbNCw4XSxbMCwxMF0sWzEwLDExXV0=
+\begin{center}
+\[\begin{tikzcd}
+	&&&& \mathsf{Exp} \\
+	&&& \mathsf{Exp} & {+} & \mathsf{Exp1} \\
+	&& \mathsf{Exp1} &&&& \mathsf{Exp2} \\
+	& \mathsf{Exp2} &&&&&& \mathsf{int} \\
+	\mathsf{int} \\
+	2 &&&& {+} &&& 1
+	\arrow[from=1-5, to=2-4]
+	\arrow[from=1-5, to=2-5]
+	\arrow[from=1-5, to=2-6]
+	\arrow[from=2-4, to=3-3]
+	\arrow[from=2-5, to=6-5]
+	\arrow[from=2-6, to=3-7]
+	\arrow[from=3-3, to=4-2]
+	\arrow[from=3-7, to=4-8]
+	\arrow[from=4-2, to=5-1]
+	\arrow[from=4-8, to=6-8]
+	\arrow[from=5-1, to=6-1]
+\end{tikzcd}\]
+\end{center}
+
+\medskip
+
+\paragraph{Tree \#2}
+% https://q.uiver.app/#q=WzAsMTUsWzIsMCwiZXhwIl0sWzEsMSwiZXhwMSJdLFs0LDEsImV4cDEiXSxbMCwyLCJleHAyIl0sWzUsMiwiZXhwMiJdLFswLDMsImludCJdLFszLDIsImV4cDEiXSxbMywzLCJleHAyIl0sWzUsMywiaW50Il0sWzMsNCwiaW50Il0sWzMsNSwiMiJdLFs1LDUsIjMiXSxbMCw1LCIxIl0sWzIsNSwiKyJdLFs0LDUsIioiXSxbMCwxXSxbMSwzXSxbMyw1XSxbMCwyXSxbMiw2XSxbMiw0XSxbMiwxNF0sWzAsMTNdLFs1LDEyXSxbNiw3XSxbNyw5XSxbOSwxMF0sWzQsOF0sWzgsMTFdXQ==
+\begin{center}
+\[\begin{tikzcd}
+	&& \mathsf{Exp} \\
+	& \mathsf{Exp1} &&& \mathsf{Exp1} \\
+	\mathsf{Exp2} &&& \mathsf{Exp1} && \mathsf{Exp2} \\
+	\mathsf{int} &&& \mathsf{Exp2} && \mathsf{int} \\
+	&&& \mathsf{int} \\
+	1 && {+} & 2 & {*} & 3
+	\arrow[from=1-3, to=2-2]
+	\arrow[from=1-3, to=2-5]
+	\arrow[from=1-3, to=6-3]
+	\arrow[from=2-2, to=3-1]
+	\arrow[from=2-5, to=3-4]
+	\arrow[from=2-5, to=3-6]
+	\arrow[from=2-5, to=6-5]
+	\arrow[from=3-1, to=4-1]
+	\arrow[from=3-4, to=4-4]
+	\arrow[from=3-6, to=4-6]
+	\arrow[from=4-1, to=6-1]
+	\arrow[from=4-4, to=5-4]
+	\arrow[from=4-6, to=6-6]
+	\arrow[from=5-4, to=6-4]
+\end{tikzcd}\]
+\end{center}
+
+\medskip
+
+\paragraph{Tree \#3}
+% https://q.uiver.app/#q=WzAsMjgsWzMsMCwiRXhwIl0sWzEsMiwiRXhwMSJdLFs1LDEsIkV4cDEiXSxbMCwzLCJFeHAyIl0sWzAsNCwiaW50Il0sWzYsMiwiRXhwMiJdLFs1LDMsIigiXSxbNywzLCIpIl0sWzYsMywiRXhwIl0sWzYsNCwiRXhwMSJdLFs1LDUsIkV4cDEiXSxbNyw1LCJFeHAyIl0sWzQsNSwiKCJdLFs4LDUsIikiXSxbNiw1LCIqIl0sWzUsNiwiRXhwMiJdLFs3LDYsImludCJdLFs1LDcsImludCJdLFs1LDgsIjIiXSxbNiwxXSxbMyw4LCIrIl0sWzMsMSwiKyJdLFs0LDgsIigiXSxbNiw4LCIqIl0sWzcsOCwiMyJdLFs4LDgsIikiXSxbMiwxLCJFeHAiXSxbMCw4LCIxIl0sWzEsM10sWzMsNF0sWzIsNV0sWzUsNl0sWzUsOF0sWzUsN10sWzgsOV0sWzksMTBdLFs5LDExXSxbNiwxMl0sWzcsMTNdLFs5LDE0XSxbMTEsMTZdLFsxMCwxNV0sWzE1LDE3XSxbMTcsMThdLFswLDJdLFswLDIxXSxbMjEsMjBdLFsxMiwyMl0sWzE0LDIzXSxbMTYsMjRdLFsxMywyNV0sWzAsMjZdLFsyNiwxXSxbNCwyN11d
+\begin{center}
+\[\begin{tikzcd}
+	&&& \mathsf{Exp} \\
+	&& \mathsf{Exp} & {+} && \mathsf{Exp1} \\
+	& \mathsf{Exp1} &&&&& \mathsf{Exp2} \\
+	\mathsf{Exp2} &&&&& {(} & \mathsf{Exp} & {)} \\
+	\mathsf{int} &&&&&& \mathsf{Exp1} \\
+	&&&& {(} & \mathsf{Exp1} & {*} & \mathsf{Exp2} & {)} \\
+	&&&&& \mathsf{Exp2} && \mathsf{int} \\
+	&&&&& \mathsf{int} \\
+	1 &&& {+} & {(} & 2 & {*} & 3 & {)}
+	\arrow[from=1-4, to=2-3]
+	\arrow[from=1-4, to=2-4]
+	\arrow[from=1-4, to=2-6]
+	\arrow[from=2-3, to=3-2]
+	\arrow[from=2-4, to=9-4]
+	\arrow[from=2-6, to=3-7]
+	\arrow[from=3-2, to=4-1]
+	\arrow[from=3-7, to=4-6]
+	\arrow[from=3-7, to=4-7]
+	\arrow[from=3-7, to=4-8]
+	\arrow[from=4-1, to=5-1]
+	\arrow[from=4-6, to=6-5]
+	\arrow[from=4-7, to=5-7]
+	\arrow[from=4-8, to=6-9]
+	\arrow[from=5-1, to=9-1]
+	\arrow[from=5-7, to=6-6]
+	\arrow[from=5-7, to=6-7]
+	\arrow[from=5-7, to=6-8]
+	\arrow[from=6-5, to=9-5]
+	\arrow[from=6-6, to=7-6]
+	\arrow[from=6-7, to=9-7]
+	\arrow[from=6-8, to=7-8]
+	\arrow[from=6-9, to=9-9]
+	\arrow[from=7-6, to=8-6]
+	\arrow[from=7-8, to=9-8]
+	\arrow[from=8-6, to=9-6]
+\end{tikzcd}\]
+\end{center}
+
+\medskip
+
+\paragraph{Tree \#4}
+% https://q.uiver.app/#q=WzAsMjgsWzUsMCwiRXhwIl0sWzUsMSwiRXhwMSJdLFszLDMsIkV4cDIiXSxbNSwyLCIqIl0sWzYsMiwiRXhwMiJdLFs3LDMsImludCJdLFsyLDUsIkV4cCJdLFs4LDQsIjMiXSxbMSw2LCJFeHAiXSxbMiw2LCIrIl0sWzMsNiwiRXhwMSJdLFs0LDUsIikiXSxbMSw1LCIoIl0sWzAsNiwiKCJdLFs0LDYsIikiXSxbMSw3LCJFeHAxIl0sWzMsNywiRXhwMiJdLFsxLDgsIkV4cDIiXSxbMyw4LCJpbnQiXSxbMSw5LCJpbnQiXSxbMyw5LCIyIl0sWzEsMTAsIjEiXSxbMiwxMCwiKyJdLFszLDEwLCIyIl0sWzgsMTAsIjMiXSxbNSwxMCwiKiJdLFswLDEwLCIoIl0sWzQsMTAsIikiXSxbMCwxXSxbMSwyXSxbMSwzXSxbMSw0XSxbNCw1XSxbNSw3XSxbNiwxMF0sWzYsOF0sWzYsOV0sWzIsNl0sWzIsMTFdLFsyLDEyXSxbMTIsMTNdLFsxMSwxNF0sWzEzLDI2XSxbOCwxNV0sWzE1LDE3XSxbMTcsMTldLFsxOSwyMV0sWzksMjJdLFsxMCwxNl0sWzE2LDE4XSxbMTgsMjBdLFsyMCwyM10sWzE0LDI3XSxbMywyNV0sWzcsMjRdXQ==
+\begin{center}
+\[\begin{tikzcd}
+	&&&&& \mathsf{Exp} \\
+	&&&&& \mathsf{Exp1} \\
+	&&&&& {*} & \mathsf{Exp2} \\
+	&&& \mathsf{Exp2} &&&& \mathsf{int} \\
+	&&&&&&&& 3 \\
+	& {()} & \mathsf{Exp} && {)} \\
+	{(} & \mathsf{Exp} & {+} & \mathsf{Exp1} & {)} \\
+	& \mathsf{Exp1} && \mathsf{Exp2} \\
+	& \mathsf{Exp2} && \mathsf{int} \\
+	& \mathsf{int} && 2 \\
+	{(} & 1 & {+} & 2 & {)} & {*} &&& 3
+	\arrow[from=1-6, to=2-6]
+	\arrow[from=2-6, to=3-6]
+	\arrow[from=2-6, to=3-7]
+	\arrow[from=2-6, to=4-4]
+	\arrow[from=3-6, to=11-6]
+	\arrow[from=3-7, to=4-8]
+	\arrow[from=4-4, to=6-2]
+	\arrow[from=4-4, to=6-3]
+	\arrow[from=4-4, to=6-5]
+	\arrow[from=4-8, to=5-9]
+	\arrow[from=5-9, to=11-9]
+	\arrow[from=6-2, to=7-1]
+	\arrow[from=6-3, to=7-2]
+	\arrow[from=6-3, to=7-3]
+	\arrow[from=6-3, to=7-4]
+	\arrow[from=6-5, to=7-5]
+	\arrow[from=7-1, to=11-1]
+	\arrow[from=7-2, to=8-2]
+	\arrow[from=7-3, to=11-3]
+	\arrow[from=7-4, to=8-4]
+	\arrow[from=7-5, to=11-5]
+	\arrow[from=8-2, to=9-2]
+	\arrow[from=8-4, to=9-4]
+	\arrow[from=9-2, to=10-2]
+	\arrow[from=9-4, to=10-4]
+	\arrow[from=10-2, to=11-2]
+	\arrow[from=10-4, to=11-4]
+\end{tikzcd}\]
+\end{center}
+
+\medskip
+
+\paragraph{Tree \#5}
+% https://q.uiver.app/#q=WzAsNDcsWzksMCwiRXhwIl0sWzUsMSwiRXhwIl0sWzksMSwiKyJdLFsxMCwxLCJFeHAxIl0sWzUsMiwiKyJdLFsxLDIsIkV4cCJdLFs5LDIsIisiXSxbMSwzLCIrIl0sWzAsMywiRXhwIl0sWzMsMywiRXhwMSJdLFs1LDMsIisiXSxbNywyLCJFeHAxIl0sWzksMywiKyJdLFswLDQsIkV4cDEiXSxbMCw1LCJFeHAyIl0sWzAsNiwiaW50Il0sWzAsNywiMSJdLFsyLDQsIkV4cCJdLFszLDQsIioiXSxbNCw0LCJFeHAyIl0sWzIsNSwiRXhwMSJdLFsyLDYsIkV4cDIiXSxbMiw3LCJpbnQiXSxbNCw1LCJpbnQiXSxbNCw2LCIzIl0sWzQsNywiMyJdLFswLDgsIjEiXSxbMiw4LCIyIl0sWzQsOCwiMyJdLFs1LDgsIisiXSxbMyw4LCIqIl0sWzEsOCwiKyJdLFs2LDQsIkV4cDEiXSxbNyw0LCIqIl0sWzgsNCwiRXhwMiJdLFs2LDUsIkV4cDIiXSxbNiw2LCJpbnQiXSxbNiw3LCI0Il0sWzgsNSwiaW50Il0sWzgsNiwiNSJdLFs3LDgsIioiXSxbNiw4LCI0Il0sWzgsOCwiNSJdLFs5LDgsIisiXSxbMTAsOCwiNiJdLFsxMCwyLCJFeHAyIl0sWzEwLDMsImludCJdLFswLDJdLFswLDNdLFsxLDRdLFsyLDZdLFs1LDddLFs1LDhdLFs1LDldLFs0LDEwXSxbNiwxMl0sWzAsMV0sWzgsMTNdLFsxMywxNF0sWzE0LDE1XSxbMTUsMTZdLFsxLDVdLFs5LDE3XSxbOSwxOV0sWzksMThdLFsxNywyMF0sWzIwLDIxXSxbMjEsMjJdLFsxOSwyM10sWzIzLDI0XSxbMjQsMjVdLFsxMCwyOV0sWzcsMzFdLFsyMiwyN10sWzE4LDMwXSxbMjUsMjhdLFsxMSwzMl0sWzExLDMzXSxbMTEsMzRdLFsxLDExXSxbMzIsMzVdLFszNSwzNl0sWzM2LDM3XSxbMzcsNDFdLFszMyw0MF0sWzM0LDM4XSxbMzgsMzldLFszOSw0Ml0sWzEyLDQzXSxbMTYsMjZdLFszLDQ1XSxbNDUsNDZdLFs0Niw0NF1d
+\[\begin{tikzcd}
+	&&&&&&&&& Exp \\
+	&&&&& Exp &&&& {+} & Exp1 \\
+	& Exp &&&& {+} && Exp1 && {+} & Exp2 \\
+	Exp & {+} && Exp1 && {+} &&&& {+} & int \\
+	Exp1 && Exp & {*} & Exp2 && Exp1 & {*} & Exp2 \\
+	Exp2 && Exp1 && int && Exp2 && int \\
+	int && Exp2 && 3 && int && 5 \\
+	1 && int && 3 && 4 \\
+	1 & {+} & 2 & {*} & 3 & {+} & 4 & {*} & 5 & {+} & 6
+	\arrow[from=1-10, to=2-6]
+	\arrow[from=1-10, to=2-10]
+	\arrow[from=1-10, to=2-11]
+	\arrow[from=2-6, to=3-2]
+	\arrow[from=2-6, to=3-6]
+	\arrow[from=2-6, to=3-8]
+	\arrow[from=2-10, to=3-10]
+	\arrow[from=2-11, to=3-11]
+	\arrow[from=3-2, to=4-1]
+	\arrow[from=3-2, to=4-2]
+	\arrow[from=3-2, to=4-4]
+	\arrow[from=3-6, to=4-6]
+	\arrow[from=3-8, to=5-7]
+	\arrow[from=3-8, to=5-8]
+	\arrow[from=3-8, to=5-9]
+	\arrow[from=3-10, to=4-10]
+	\arrow[from=3-11, to=4-11]
+	\arrow[from=4-1, to=5-1]
+	\arrow[from=4-2, to=9-2]
+	\arrow[from=4-4, to=5-3]
+	\arrow[from=4-4, to=5-4]
+	\arrow[from=4-4, to=5-5]
+	\arrow[from=4-6, to=9-6]
+	\arrow[from=4-10, to=9-10]
+	\arrow[from=4-11, to=9-11]
+	\arrow[from=5-1, to=6-1]
+	\arrow[from=5-3, to=6-3]
+	\arrow[from=5-4, to=9-4]
+	\arrow[from=5-5, to=6-5]
+	\arrow[from=5-7, to=6-7]
+	\arrow[from=5-8, to=9-8]
+	\arrow[from=5-9, to=6-9]
+	\arrow[from=6-1, to=7-1]
+	\arrow[from=6-3, to=7-3]
+	\arrow[from=6-5, to=7-5]
+	\arrow[from=6-7, to=7-7]
+	\arrow[from=6-9, to=7-9]
+	\arrow[from=7-1, to=8-1]
+	\arrow[from=7-3, to=8-3]
+	\arrow[from=7-5, to=8-5]
+	\arrow[from=7-7, to=8-7]
+	\arrow[from=7-9, to=9-9]
+	\arrow[from=8-1, to=9-1]
+	\arrow[from=8-3, to=9-3]
+	\arrow[from=8-5, to=9-5]
+	\arrow[from=8-7, to=9-7]
+\end{tikzcd}\]
+
+\subsection{Week 8, Tutorial world}
+\subsubsection*{HW 8}
+
+level 5:
+a+(b+0)+(c+0)=a+b+c.
+rw [add_zero]
+rw [add_zero]
+rfl
+
+level 6:
+a+(b+0)+(c+0)=a+b+c.
+rw [one_eq_succ_zero]
+rw [add_succ]
+rw [add_zero]
+rfl
+
+level 7:
+Theorem succ_eq_add_one: For all natural numbers a, we have succ(a)=a+1.
+
+theorem succ_eq_add_one n : succ n = n + 1 := by
+
+rw [one_eq_succ_zero]
+rw [add_succ]
+rw [add_zero]
+rfl
+
+level 8:
+2+2=4.
+
+example : (2 : ℕ) + 2 = 4 := by
+
+nth_rewrite 2 [two_eq_succ_one]
+rw [add_succ]
+rw [succ_eq_add_one]
+nth_rewrite 1 [two_eq_succ_one]
+rw [one_eq_succ_zero]
+rw [four_eq_succ_three]
+rw[three_eq_succ_two]
+rw[two_eq_succ_one]
+nth_rewrite 5 [succ_eq_add_one]
+nth_rewrite 5 [succ_eq_add_one]
+nth_rewrite 5 [succ_eq_add_one]
+nth_rewrite 1 [succ_eq_add_one]
+rw [one_eq_succ_zero]
+rfl
 
  
 \section{Essay}
