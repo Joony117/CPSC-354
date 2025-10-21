@@ -1,4 +1,5 @@
 \documentclass{article}
+\usepackage[utf8]{inputenc}
 
 \usepackage{tikz} 
 \usetikzlibrary{automata, positioning, arrows} 
@@ -48,24 +49,16 @@
 }
 
 \newtheoremstyle{theorem}
-  {\topsep}   % ABOVESPACE
-  {\topsep}   % BELOWSPACE
-  {\itshape\/}  % BODYFONT
-  {0pt}       % INDENT (empty value is the same as 0pt)
-  {\bfseries} % HEADFONT
-  {.}         % HEADPUNCT
-  {5pt plus 1pt minus 1pt} % HEADSPACE
-  {}          % CUSTOM-HEAD-SPEC
-\theoremstyle{theorem} 
-   \newtheorem{theorem}{Theorem}[section]
-   \newtheorem{corollary}[theorem]{Corollary}
-   \newtheorem{lemma}[theorem]{Lemma}
-   \newtheorem{proposition}[theorem]{Proposition}
-\theoremstyle{definition}
-   \newtheorem{definition}[theorem]{Definition}
-   \newtheorem{example}[theorem]{Example}
-\theoremstyle{remark}    
-  \newtheorem{remark}[theorem]{Remark}
+  {\topsep}
+  {\topsep}
+  {\itshape}    % <-- fixed
+  {0pt}
+  {\bfseries}
+  {.}
+  {5pt plus 1pt minus 1pt}
+  {}
+\theoremstyle{theorem}
+\newtheorem{theorem}{Theorem}[section]
 
 \title{CPSC-354 Report}
 \author{Junho Yi  \\ Chapman University}
@@ -944,50 +937,77 @@ F = (\lambda \mathsf{fact}.\,\lambda n.\; \text{if } n=0 \text{ then } 1 \text{ 
 \end{tikzcd}\]
 
 \subsection{Week 8, Tutorial world}
-\subsubsection*{HW 8}
+\subsubsection*{HW 8 (NNG Tutorial World: Levels 5--8)}
 
-level 5:
-a+(b+0)+(c+0)=a+b+c.
+\paragraph{Level 5.}
+\[
+\forall a,b,c\in\mathbb{N},\quad a+(b+0)+(c+0)=a+b+c.
+\]
+\textbf{Lean (tactic script).}
+\begin{lstlisting}
 rw [add_zero]
 rw [add_zero]
 rfl
+\end{lstlisting}
 
-level 6:
-a+(b+0)+(c+0)=a+b+c.
+\textbf{Natural-language proof.}
+Use the right identity of addition on naturals: for any \(x\in\mathbb{N}\), \(x+0=x\).
+Applying it to \(b\) gives \(b+0=b\); applying it to \(c\) gives \(c+0=c\).
+Substitute to get \(a+(b+0)+(c+0)=a+b+c\). \(\qed\)
+
+\medskip
+
+\paragraph{Level 6.}
+(Goal) \(\;a+(b+0)+(c+0)=a+b+c.\)
+\begin{lstlisting}
 rw [one_eq_succ_zero]
 rw [add_succ]
 rw [add_zero]
 rfl
+\end{lstlisting}
 
-level 7:
-Theorem succ_eq_add_one: For all natural numbers a, we have succ(a)=a+1.
+\medskip
 
-theorem succ_eq_add_one n : succ n = n + 1 := by
+\paragraph{Level 7.\; \(\mathrm{succ}\_eq\_\mathrm{add}\_one\)}
+\begin{theorem}
+For all \(n\in\mathbb{N}\), \(\mathrm{succ}(n)=n+1\).
+\end{theorem}
 
-rw [one_eq_succ_zero]
-rw [add_succ]
-rw [add_zero]
-rfl
+\textbf{Lean.}
+\begin{lstlisting}
+theorem succ_eq_add_one (n : Nat) : succ n = n + 1 := by
+  rw [one_eq_succ_zero]
+  rw [add_succ]
+  rw [add_zero]
+  rfl
+\end{lstlisting}
 
-level 8:
-2+2=4.
+\medskip
 
-example : (2 : ℕ) + 2 = 4 := by
+\paragraph{Level 8.}
+\[
+(2:\mathbb{N})+2=4.
+\]
+\textbf{Lean.}
+\begin{lstlisting}
+example : (2 : Nat) + 2 = 4 := by
+  nth_rewrite 2 [two_eq_succ_one]
+  rw [add_succ]
+  rw [succ_eq_add_one]
+  nth_rewrite 1 [two_eq_succ_one]
+  rw [one_eq_succ_zero]
+  rw [four_eq_succ_three]
+  rw [three_eq_succ_two]
+  rw [two_eq_succ_one]
+  nth_rewrite 5 [succ_eq_add_one]
+  nth_rewrite 5 [succ_eq_add_one]
+  nth_rewrite 5 [succ_eq_add_one]
+  nth_rewrite 1 [succ_eq_add_one]
+  rw [one_eq_succ_zero]
+  rfl
+\end{lstlisting}
 
-nth_rewrite 2 [two_eq_succ_one]
-rw [add_succ]
-rw [succ_eq_add_one]
-nth_rewrite 1 [two_eq_succ_one]
-rw [one_eq_succ_zero]
-rw [four_eq_succ_three]
-rw[three_eq_succ_two]
-rw[two_eq_succ_one]
-nth_rewrite 5 [succ_eq_add_one]
-nth_rewrite 5 [succ_eq_add_one]
-nth_rewrite 5 [succ_eq_add_one]
-nth_rewrite 1 [succ_eq_add_one]
-rw [one_eq_succ_zero]
-rfl
+\medskip
 
  
 \section{Essay}
