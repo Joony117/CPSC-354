@@ -25,7 +25,39 @@
     
 \usepackage{listings}
 \usepackage[utf8]{inputenc}                                                    
-\usepackage[T1]{fontenc}                                                       
+\usepackage[T1]{fontenc}
+\usepackage{listingsutf8}
+
+\lstdefinelanguage{lean}{
+  morekeywords={theorem,example,def,lemma,by,where,inductive,structure,match,with,open,namespace,end,variable,variables,universe,universes,axiom,axioms,intro,cases,case,exact,have,let,in,fun,Type,Prop},
+  sensitive=true,
+  morecomment=[l]{--},
+  morecomment=[s]{/-}{-/},
+  morestring=[b]"
+}
+
+\lstset{
+  inputencoding=utf8,
+  language=lean,
+  literate=
+    {∧}{{$\wedge$}}1
+    {∨}{{$\vee$}}1
+    {→}{{$\to$}}2
+    {↔}{{$\leftrightarrow$}}1
+    {¬}{{$\neg$}}1
+    {λ}{{$\lambda$}}1
+    {ℕ}{{$\mathbb{N}$}}1
+    {ℤ}{{$\mathbb{Z}$}}1
+    {≤}{{$\le$}}1
+    {≥}{{$\ge$}}1
+    {≠}{{$\ne$}}1
+    {α}{{$\alpha$}}1
+    {β}{{$\beta$}}1
+    {γ}{{$\gamma$}}1
+    {Π}{{$\Pi$}}1
+    {Σ}{{$\Sigma$}}1
+    {×}{{$\times$}}1
+}
 
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
@@ -1008,6 +1040,49 @@ example : (2 : Nat) + 2 = 4 := by
 \end{lstlisting}
 
 \medskip
+
+\subsection{Week 9, Addition World}
+\subsubsection*{HW 9 (Level 5: \texorpdfstring{$(P\wedge Q)\Rightarrow Q$}{(P∧Q) ⇒ Q}) \cite{kurz-addition}}
+
+\paragraph{Problem.} From \(P\land Q\) infer \(Q\). In Lean:
+\begin{lstlisting}[language=lean]
+example (P Q : Prop) (h : P ∧ Q) : Q := by
+  exact h.right
+\end{lstlisting}
+
+\paragraph{Solution A (without induction): \(\land\)-elimination / projection.}
+\begin{theorem}
+If \(h: P\land Q\), then \(Q\).
+\end{theorem}
+\begin{proof}[Pen-and-paper proof.]
+By conjunction elimination on the right (\(\land\)-elim\(_2\)), from \(P\land Q\) we obtain \(Q\).
+Formally, the second projection \(\pi_2 : P\land Q \to Q\) applied to \(h\) yields \(Q\).
+\end{proof}
+
+\noindent\textbf{Lean (one-liner).}
+\begin{lstlisting}[language=lean]
+example (P Q : Prop) (h : P ∧ Q) : Q := h.2
+\end{lstlisting}
+
+\paragraph{Solution B (with induction/case analysis on \(\mathsf{And}\)).}
+\begin{theorem}
+If \(h: P\land Q\), then \(Q\).
+\end{theorem}
+\begin{proof}[Pen-and-paper proof using the inductive/elimination principle of \(\mathsf{And}\).]
+The proposition \(P\land Q\) is an inductive type with constructor \(\mathsf{And.intro}: P\to Q\to (P\land Q)\).
+Its eliminator says: to produce a result \(R\) from \(P\land Q\), it suffices to provide a function \(f:P\to Q\to R\).
+Choose \(R:=Q\) and \(f(p,q):=q\). Applying the eliminator to \(h\) yields \(Q\).
+Concretely, ``case-analyze'' \(h\) into \(p:P\) and \(q:Q\), then return \(q\).
+\end{proof}
+
+\noindent\textbf{Lean (case analysis).}
+\begin{lstlisting}[language=lean]
+example (P Q : Prop) (h : P ∧ Q) : Q := by
+  cases h with
+  | intro hp hq => exact hq
+-- Equivalent:
+-- example (P Q : Prop) (h : P ∧ Q) : Q := And.rec (fun _ q => q) h
+\end{lstlisting}
 
  
 \section{Essay}
